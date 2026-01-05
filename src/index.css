@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --color-vitta-primary: #005f5f;
+  --color-vitta-light: #00d1b2;
+  --color-vitta-dark: #004d4d;
+  --radius-vitta: 2.5rem;
+}
+
+body {
+  @apply bg-white text-slate-900 antialiased;
+}
+/* Customização das bolinhas do Swiper */
+.swiper-pagination-bullet-active {
+  background: var(--color-vitta-light) !important;
+}
+
+.swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  opacity: 0.5;
+}
+/* Personaliza as setas do carrossel */
+:root {
+  --swiper-navigation-color: #ffffff; /* Cor das setas */
+  --swiper-navigation-size: 24px;     /* Tamanho das setas */
+  --swiper-pagination-color: #ffffff; /* Cor das bolinhas */
+}
+
+/* Esconde as setas no mobile para não poluir, mostra apenas no desktop */
+@media (max-width: 768px) {
+  .swiper-button-next, .swiper-button-prev {
+    display: none !important;
+  }
+}
