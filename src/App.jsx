@@ -24,7 +24,7 @@ function Navbar() {
           <img 
             src="/imagens/LogoVitta.png" 
             alt="VittaGene Logo" 
-            className="h-12 md:h-14 w-auto object-contain" 
+            className="h-17 md:h-21 w-auto object-contain" 
           />
         </Link>
 
