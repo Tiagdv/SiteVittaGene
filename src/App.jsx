@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useNavigate, Link } from 'react
 import Exames from './pages/Exames';
 import Vacinas from './pages/Vacinas';
 import Contato from './pages/Contato';
+import Sobre from './pages/Sobre';
 import { 
   Search, MapPin, Phone, ShieldCheck, Calendar, 
   ArrowRight, Instagram, Facebook, Linkedin, Menu, X 
@@ -33,7 +34,7 @@ function Navbar() {
         <div className="hidden md:flex gap-8 font-bold text-slate-600 text-sm">
           <Link to="/exames" className="hover:text-vitta-primary transition-colors uppercase">Exames</Link>
           <Link to="/vacinas" className="hover:text-vitta-primary transition-colors uppercase">Vacinas</Link>
-          <a href="#" className="hover:text-vitta-primary transition-colors uppercase">A Vitta</a>
+          <Link to="/Sobre" className="hover:text-vitta-primary transition-colors uppercase">Sobre</Link>
           <Link to="/contato" className="hover:text-vitta-primary transition-colors uppercase">Contato</Link>
         </div>
 
@@ -55,7 +56,7 @@ function Navbar() {
         <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-slate-100 p-6 flex flex-col gap-6 shadow-xl animate-in slide-in-from-top duration-300">
           <Link to="/exames" className="text-lg font-bold text-slate-700" onClick={() => setMenuAberto(false)}>Exames</Link>
           <Link to="/vacinas" className="text-lg font-bold text-slate-700" onClick={() => setMenuAberto(false)}>Vacinas</Link>
-          <a href="#" className="text-lg font-bold text-slate-700">A Vitta</a>
+          <Link to="/sobre" className="text-lg font-bold text-slate-700" onClick={() => setMenuAberto(false)}>Sobre</Link>
           <Link to="/contato" className="text-lg font-bold text-slate-700" onClick={() => setMenuAberto(false)}>Contato</Link>
           <button className="bg-vitta-primary text-white w-full py-4 rounded-2xl font-bold">Agendar Agora</button>
         </div>
@@ -280,6 +281,7 @@ export default function App() {
         <Route path="/exames" element={<Exames />} />
         <Route path="/vacinas" element={<Vacinas />} />
         <Route path="/contato" element={<Contato />} />
+        <Route path="/sobre" element={<Sobre />} />
       </Routes>
       <Footer /> {/* O rodapé agora é global */}
     </Router>
