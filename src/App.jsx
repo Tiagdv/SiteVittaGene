@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, Link } from 'react-router-dom';
 import Exames from './pages/Exames';
+import Vacinas from './pages/Vacinas';
+import Contato from './pages/Contato';
 import { 
   Search, MapPin, Phone, ShieldCheck, Calendar, 
   ArrowRight, Instagram, Facebook, Linkedin, Menu, X 
@@ -13,27 +15,26 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-// --- COMPONENTE NAVBAR (Aparece em todas as páginas) ---
 function Navbar() {
   const [menuAberto, setMenuAberto] = useState(false);
 
   return (
-    <nav className="fixed w-full bg-white/90 backdrop-blur-md z-[100] border-b border-slate-100 px-6 py-4">
+    <nav className="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md z-[1000] border-b border-slate-100 px-6 py-4">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <Link to="/" className="flex items-center">
+        <Link to="/" className="flex items-center" onClick={() => setMenuAberto(false)}>
           <img 
             src="/imagens/LogoVitta.png" 
             alt="VittaGene Logo" 
-            className="h-17 md:h-21 w-auto object-contain" 
+            className="h-12 md:h-16 w-auto object-contain" 
           />
         </Link>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-8 font-bold text-slate-600 text-sm">
           <Link to="/exames" className="hover:text-vitta-primary transition-colors uppercase">Exames</Link>
-          <a href="#" className="hover:text-vitta-primary transition-colors uppercase">Vacinas</a>
+          <Link to="/vacinas" className="hover:text-vitta-primary transition-colors uppercase">Vacinas</Link>
           <a href="#" className="hover:text-vitta-primary transition-colors uppercase">A Vitta</a>
-          <a href="#" className="hover:text-vitta-primary transition-colors uppercase">Contato</a>
+          <Link to="/contato" className="hover:text-vitta-primary transition-colors uppercase">Contato</Link>
         </div>
 
         <div className="flex items-center gap-4">
@@ -53,9 +54,9 @@ function Navbar() {
       {menuAberto && (
         <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-slate-100 p-6 flex flex-col gap-6 shadow-xl animate-in slide-in-from-top duration-300">
           <Link to="/exames" className="text-lg font-bold text-slate-700" onClick={() => setMenuAberto(false)}>Exames</Link>
-          <a href="#" className="text-lg font-bold text-slate-700">Vacinas</a>
+          <Link to="/vacinas" className="text-lg font-bold text-slate-700" onClick={() => setMenuAberto(false)}>Vacinas</Link>
           <a href="#" className="text-lg font-bold text-slate-700">A Vitta</a>
-          <a href="#" className="text-lg font-bold text-slate-700">Contato</a>
+          <Link to="/contato" className="text-lg font-bold text-slate-700" onClick={() => setMenuAberto(false)}>Contato</Link>
           <button className="bg-vitta-primary text-white w-full py-4 rounded-2xl font-bold">Agendar Agora</button>
         </div>
       )}
@@ -91,7 +92,7 @@ function Footer() {
             <h4 className="font-bold mb-6 text-vitta-light uppercase text-xs tracking-widest">Serviços</h4>
             <ul className="space-y-4 text-sm text-slate-400 font-bold">
               <li><Link to="/exames" className="hover:text-white transition-colors">Exames Laboratoriais</Link></li>
-              <li><a href="#" className="hover:text-white transition-colors">Vacinas Domiciliares</a></li>
+              <li><Link to="/vacinas" className="hover:text-white transition-colors">Vacinas Domiciliares</Link></li>
               <li><a href="#" className="hover:text-white transition-colors">Check-ups</a></li>
             </ul>
           </div>
@@ -277,6 +278,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/exames" element={<Exames />} />
+        <Route path="/vacinas" element={<Vacinas />} />
+        <Route path="/contato" element={<Contato />} />
       </Routes>
       <Footer /> {/* O rodapé agora é global */}
     </Router>
