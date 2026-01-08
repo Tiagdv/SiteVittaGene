@@ -143,11 +143,11 @@ function Home() {
       <header className="pt-28 md:pt-40 pb-8 md:pb-12 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center">
         <div className="space-y-6 text-center md:text-left order-2 md:order-1">
           <h1 className="text-4xl md:text-7xl font-extrabold text-slate-900 leading-tight">
-            Exames onde <br/>
-            <span className="text-vitta-light italic font-serif">você estiver.</span>
+            O seu código genético revela o <br/>
+            <span className="text-vitta-light italic font-serif">caminho para sua saúde.</span>
           </h1>
           <p className="text-lg md:text-xl text-slate-500 font-medium leading-relaxed">
-            Conforto e segurança para realizar seus exames laboratoriais em casa ou em nossas unidades.
+            Vá além do básico. Realize exames genéticos avançados e laboratoriais de rotina com a tecnologia que o seu corpo merece, no conforto da sua casa.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
             <button onClick={() => navigate('/exames')} className="bg-vitta-light text-vitta-dark px-10 py-4 rounded-2xl font-black text-lg shadow-lg hover:-translate-y-1 transition-all cursor-pointer">
@@ -163,7 +163,7 @@ function Home() {
           <div className="absolute -inset-2 md:-inset-4 bg-vitta-light/10 rounded-[2rem] md:rounded-[3.5rem] rotate-3" />
           <div className="relative rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-2xl border-2 md:border-4 border-white h-[250px] md:h-[500px]">
             <img 
-              src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=1000" 
+              src="/imagens/cientista.png"
               className="w-full h-full object-cover" 
               alt="Atendimento VittaGene" 
             />
