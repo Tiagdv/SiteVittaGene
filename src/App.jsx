@@ -139,7 +139,27 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-white font-sans antialiased">
-      {/* 2. HERO SECTION */}
+      
+      {/* 2. BUSCA (Agora no topo) */}
+<section className="pt-32 md:pt-40 px-6 relative z-20"> {/* Aumentamos o padding top para descer do menu */}
+  <form onSubmit={handleBusca} className="max-w-4xl mx-auto bg-white p-3 md:p-4 rounded-[1.5rem] md:rounded-[2rem] shadow-2xl border border-slate-100 flex flex-col md:flex-row gap-2">
+    <div className="flex-1 flex items-center gap-3 px-4 py-2">
+      <Search className="text-vitta-primary" size={20} />
+      <input 
+        type="text" 
+        value={termoBusca}
+        onChange={(e) => setTermoBusca(e.target.value)}
+        placeholder="Qual exame você procura?" 
+        className="w-full outline-none text-base md:text-lg font-semibold text-slate-700 placeholder:text-slate-400"
+      />
+    </div>
+    <button type="submit" className="bg-vitta-primary text-white px-8 py-4 rounded-xl md:rounded-2xl font-black text-lg hover:brightness-110 transition-all cursor-pointer">
+      Buscar
+    </button>
+  </form>
+</section>
+
+{/* 3. HERO SECTION */}
       <header className="pt-28 md:pt-40 pb-8 md:pb-12 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center">
         <div className="space-y-6 text-center md:text-left order-2 md:order-1">
           <h1 className="text-4xl md:text-7xl font-extrabold text-slate-900 leading-tight">
@@ -171,24 +191,6 @@ function Home() {
         </div>
       </header>
 
-      {/* 3. BUSCA */}
-      <section className="px-6 relative z-20 mb-12 md:-mt-8">
-        <form onSubmit={handleBusca} className="max-w-4xl mx-auto bg-white p-3 md:p-4 rounded-[1.5rem] md:rounded-[2rem] shadow-2xl border border-slate-100 flex flex-col md:flex-row gap-2">
-          <div className="flex-1 flex items-center gap-3 px-4 py-2">
-            <Search className="text-vitta-primary" size={20} />
-            <input 
-              type="text" 
-              value={termoBusca}
-              onChange={(e) => setTermoBusca(e.target.value)}
-              placeholder="Qual exame você procura?" 
-              className="w-full outline-none text-base md:text-lg font-semibold text-slate-700 placeholder:text-slate-400"
-            />
-          </div>
-          <button type="submit" className="bg-vitta-primary text-white px-8 py-4 rounded-xl md:rounded-2xl font-black text-lg hover:brightness-110 transition-all cursor-pointer">
-            Buscar
-          </button>
-        </form>
-      </section>
 
       {/* 4. QUICK CARDS */}
       <section className="py-8 md:py-16 px-6">
