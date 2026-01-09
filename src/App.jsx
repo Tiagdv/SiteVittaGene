@@ -143,8 +143,8 @@ function Home() {
       <header className="pt-28 md:pt-40 pb-8 md:pb-12 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center">
         <div className="space-y-6 text-center md:text-left order-2 md:order-1">
           <h1 className="text-4xl md:text-7xl font-extrabold text-slate-900 leading-tight">
-            O seu código genético revela o <br/>
-            <span className="text-vitta-light italic font-serif">caminho para sua saúde.</span>
+            O seu código genético revela o caminho para<br/>
+            <span className="text-vitta-light italic font-serif">sua saúde.</span>
           </h1>
           <p className="text-lg md:text-xl text-slate-500 font-medium leading-relaxed">
             Vá além do básico. Realize exames genéticos avançados e laboratoriais de rotina com a tecnologia que o seu corpo merece, no conforto da sua casa.
@@ -216,7 +216,7 @@ function Home() {
               <div className="bg-vitta-primary min-h-[300px] md:min-h-[350px] flex items-center p-8 md:p-16 text-white">
                 <div className="z-10 space-y-4 max-w-2xl text-left">
                   <h2 className="text-3xl md:text-5xl font-black leading-tight">Ano novo,<br/>saúde em dia!</h2>
-                  <p className="text-sm md:text-lg opacity-90 font-medium">Exames em casa com + de 40 planos de saúde aceitos.</p>
+                  <p className="text-sm md:text-lg opacity-90 font-medium">Exames em casa.</p>
                   <button className="bg-[#FF9F00] px-8 py-3 rounded-full font-black uppercase text-xs md:text-sm shadow-lg cursor-pointer">Agendar Agora</button>
                 </div>
               </div>
@@ -242,7 +242,7 @@ function Home() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
              <div className="rounded-[2rem] overflow-hidden shadow-2xl h-[300px] md:h-[500px]">
                 <img 
-                  src="https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800" 
+                  src="/imagens/modeloagendamento.jpg" 
                   className="w-full h-full object-cover" 
                   alt="Tecnologia VittaGene" 
                 />
