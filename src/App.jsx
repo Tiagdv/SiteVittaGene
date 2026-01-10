@@ -16,8 +16,15 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
+  // Substitua todo o bloco da Navbar por este:
 function Navbar() {
   const [menuAberto, setMenuAberto] = useState(false);
+  const WHATSAPP_NUMBER = "5521991992185"; // Substitua pelo seu número real
+
+  const agendarZap = () => {
+    const msg = encodeURIComponent("Olá, VittaGene! Gostaria de realizar um agendamento.");
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+  };
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md z-[1000] border-b border-slate-100 px-6 py-4">
@@ -34,14 +41,18 @@ function Navbar() {
         <div className="hidden md:flex gap-8 font-bold text-slate-600 text-sm">
           <Link to="/exames" className="hover:text-vitta-primary transition-colors uppercase">Exames</Link>
           <Link to="/vacinas" className="hover:text-vitta-primary transition-colors uppercase">Vacinas</Link>
-          <Link to="/Sobre" className="hover:text-vitta-primary transition-colors uppercase">Sobre</Link>
+          <Link to="/sobre" className="hover:text-vitta-primary transition-colors uppercase">Sobre</Link>
           <Link to="/contato" className="hover:text-vitta-primary transition-colors uppercase">Contato</Link>
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="hidden md:block bg-vitta-primary text-white px-8 py-3 rounded-full font-bold hover:shadow-xl transition-all cursor-pointer">
+          <button 
+            onClick={agendarZap}
+            className="hidden md:block bg-vitta-primary text-white px-8 py-3 rounded-full font-bold hover:shadow-xl hover:scale-105 transition-all cursor-pointer"
+          >
             Agendar
           </button>
+          
           <button 
             className="md:hidden text-vitta-primary p-2 cursor-pointer"
             onClick={() => setMenuAberto(!menuAberto)}
@@ -53,12 +64,17 @@ function Navbar() {
 
       {/* Mobile Menu */}
       {menuAberto && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-slate-100 p-6 flex flex-col gap-6 shadow-xl animate-in slide-in-from-top duration-300">
+        <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-slate-100 p-6 flex flex-col gap-6 shadow-xl">
           <Link to="/exames" className="text-lg font-bold text-slate-700" onClick={() => setMenuAberto(false)}>Exames</Link>
           <Link to="/vacinas" className="text-lg font-bold text-slate-700" onClick={() => setMenuAberto(false)}>Vacinas</Link>
           <Link to="/sobre" className="text-lg font-bold text-slate-700" onClick={() => setMenuAberto(false)}>Sobre</Link>
           <Link to="/contato" className="text-lg font-bold text-slate-700" onClick={() => setMenuAberto(false)}>Contato</Link>
-          <button className="bg-vitta-primary text-white w-full py-4 rounded-2xl font-bold">Agendar Agora</button>
+          <button 
+            onClick={() => { agendarZap(); setMenuAberto(false); }}
+            className="bg-vitta-primary text-white w-full py-4 rounded-2xl font-bold"
+          >
+            Agendar Agora
+          </button>
         </div>
       )}
     </nav>
@@ -160,36 +176,48 @@ function Home() {
 </section>
 
 {/* 3. HERO SECTION */}
-      <header className="pt-28 md:pt-40 pb-8 md:pb-12 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-        <div className="space-y-6 text-center md:text-left order-2 md:order-1">
-          <h1 className="text-4xl md:text-7xl font-extrabold text-slate-900 leading-tight">
-            O seu código genético revela o caminho para<br/>
-            <span className="text-vitta-light italic font-serif">sua saúde.</span>
-          </h1>
-          <p className="text-lg md:text-xl text-slate-500 font-medium leading-relaxed">
-            Vá além do básico. Realize exames genéticos avançados e laboratoriais de rotina com a tecnologia que o seu corpo merece, no conforto da sua casa.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <button onClick={() => navigate('/exames')} className="bg-vitta-light text-vitta-dark px-10 py-4 rounded-2xl font-black text-lg shadow-lg hover:-translate-y-1 transition-all cursor-pointer">
-              Agendar Exames
-            </button>
-            <button className="bg-slate-100 text-slate-700 px-10 py-4 rounded-2xl font-black text-lg hover:bg-slate-200 transition-all cursor-pointer">
-              Saiba mais
-            </button>
-          </div>
-        </div>
+<header className="pt-28 md:pt-40 pb-8 md:pb-12 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+  <div className="space-y-6 text-center md:text-left order-2 md:order-1">
+    <h1 className="text-4xl md:text-7xl font-extrabold text-slate-900 leading-tight">
+      O seu código genético revela o caminho para<br/>
+      <span className="text-vitta-light italic font-serif">sua saúde.</span>
+    </h1>
+    <p className="text-lg md:text-xl text-slate-500 font-medium leading-relaxed">
+      Vá além do básico. Realize exames genéticos avançados e laboratoriais de rotina com a tecnologia que o seu corpo merece, no conforto da sua casa.
+    </p>
+    
+    <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+      {/* BOTÃO ATUALIZADO PARA WHATSAPP */}
+      <button 
+        onClick={() => {
+          const msg = encodeURIComponent("Olá, VittaGene! Gostaria de agendar um exame.");
+          window.open(`https://wa.me/5521999999999?text=${msg}`, '_blank');
+        }} 
+        className="bg-vitta-light text-vitta-dark px-10 py-4 rounded-2xl font-black text-lg shadow-lg hover:-translate-y-1 transition-all cursor-pointer"
+      >
+        Agendar
+      </button>
 
-        <div className="relative order-1 md:order-2">
-          <div className="absolute -inset-2 md:-inset-4 bg-vitta-light/10 rounded-[2rem] md:rounded-[3.5rem] rotate-3" />
-          <div className="relative rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-2xl border-2 md:border-4 border-white h-[250px] md:h-[500px]">
-            <img 
-              src="/imagens/cientista.png"
-              className="w-full h-full object-cover" 
-              alt="Atendimento VittaGene" 
-            />
-          </div>
-        </div>
-      </header>
+      <button 
+        onClick={() => navigate('/exames')}
+        className="bg-slate-100 text-slate-700 px-10 py-4 rounded-2xl font-black text-lg hover:bg-slate-200 transition-all cursor-pointer"
+      >
+        Ver todos os exames
+      </button>
+    </div>
+  </div>
+
+  <div className="relative order-1 md:order-2">
+    <div className="absolute -inset-2 md:-inset-4 bg-vitta-light/10 rounded-[2rem] md:rounded-[3.5rem] rotate-3" />
+    <div className="relative rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-2xl border-2 md:border-4 border-white h-[250px] md:h-[500px]">
+      <img 
+        src="/imagens/cientista.png"
+        className="w-full h-full object-cover" 
+        alt="Atendimento VittaGene" 
+      />
+    </div>
+  </div>
+</header>
 
 
       {/* 4. QUICK CARDS */}
