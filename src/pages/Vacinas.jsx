@@ -1,110 +1,244 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { 
-  Search, ArrowLeft, Baby, 
-  UserRound, HeartPulse, MessageCircle, Syringe 
+  Search, 
+  ArrowLeft, 
+  MessageCircle, 
+  TestTube2, 
+  Loader2, 
+  Info, 
+  X 
 } from 'lucide-react';
+import Papa from 'papaparse';
+
+const GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR1V2aj0hj9mEvzlnR3yR3Km74tWCJs2eTrQpPOwt2XzJxT0rygdy2-bJVGqVlrKjl1g-aZu_csbiAu/pub?output=csv";
 
 export default function Vacinas() {
   const [busca, setBusca] = useState("");
-  const [filtroIdade, setFiltroIdade] = useState("Todos");
+  const [filtroCat, setFiltroCat] = useState("Todos");
+  const [vacinasData, setVacinasData] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [vacinaSelecionado, setVacinaSelecionado] = useState(null);
 
+  const location = useLocation();
   const WHATSAPP_NUMBER = "5521991992185"; 
 
-  const agendarPeloZap = (nome) => {
-    const msg = encodeURIComponent(`Olá, VittaGene! Gostaria de agendar a vacina: ${nome}.`);
+
+// carregar dados da planilha
+
+  useEffect(() => {
+    Papa.parse(GOOGLE_SHEET_URL, {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        const dadosValidos = results.data.filter(item => item.nome && item.nome.trim() !== "");
+        setVacinasData(dadosValidos);
+        setCarregando(false);
+      },
+      error: (error) => {
+        console.error("Erro ao carregar dados:", error);
+        setCarregando(false);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (location.state && location.state.query) {
+      setBusca(location.state.query);
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
+  const agendarZap = (nome) => {
+    const msg = encodeURIComponent(`Olá, VittaGene! Quero agendar a vacina: ${nome}.`);
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
   };
 
-  const listaVacinas = [
-    { id: 1, nome: "Gripe (Quadrivalente)", publico: "Todos", preco: "R$ 120,00", desc: "Proteção contra as 4 cepas principais do vírus influenza." },
-    { id: 2, nome: "Dengue (Qdenga)", publico: "Adultos", preco: "R$ 350,00", desc: "Esquema de duas doses para proteção contra dengue." },
-    { id: 3, nome: "HPV Quadrivalente", publico: "Adultos", preco: "R$ 420,00", desc: "Prevenção contra tipos de HPV causadores de câncer." },
-    { id: 4, nome: "Meningocócica B", publico: "Bebês", preco: "R$ 580,00", desc: "Proteção contra meningite bacteriana do tipo B." },
-    { id: 5, nome: "Tríplice Viral", publico: "Bebês", preco: "R$ 110,00", desc: "Sarampo, caxumba e rubéola." },
-    { id: 6, nome: "Pneumocócica 13", publico: "Idosos", preco: "R$ 290,00", desc: "Previne doenças graves como pneumonia." },
-  ];
-
-  const vacinasFiltradas = listaVacinas.filter(v => {
-    const correspondeBusca = v.nome.toLowerCase().includes(busca.toLowerCase());
-    const correspondeIdade = filtroIdade === "Todos" || v.publico === filtroIdade || v.publico === "Todos";
-    return correspondeBusca && correspondeIdade;
+  const vacinasFiltrados = vacinasData.filter(vacina => {
+    const nomeVacina = vacina.nome ? vacina.nome.toLowerCase() : "";
+    const matchesSearch = nomeVacina.includes(busca.toLowerCase());
+    const matchesCat = filtroCat === "Todos" || vacina.categoria === filtroCat;
+    return matchesSearch && matchesCat;
   });
 
+  const categorias = ["Todos", ...new Set(vacinasData.map(e => e.categoria).filter(Boolean))];
+
   return (
-    <div className="min-h-screen bg-slate-50 font-sans antialiased">
-      <main className="pt-32 md:pt-48 pb-20 px-4 md:px-6 max-w-5xl mx-auto">
+      <div className="min-h-screen bg-slate-50 font-sans antialiased relative">
         
-        {/* HEADER */}
-        <div className="mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 text-vitta-primary font-bold mb-4 hover:opacity-70 transition-all">
-            <ArrowLeft size={20} /> Voltar
-          </Link>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900">
-            Proteção para <br/><span className="text-vitta-light italic font-serif">quem você ama.</span>
-          </h2>
-        </div>
-
-        {/* BUSCA */}
-        <div className="mb-6 relative">
-          <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
-          <input 
-            type="text" 
-            placeholder="Qual vacina você procura?"
-            className="w-full bg-white border-2 border-slate-100 rounded-2xl md:rounded-[2.5rem] py-4 md:py-6 pl-14 pr-6 text-base md:text-lg font-semibold outline-none focus:border-vitta-primary shadow-sm"
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-          />
-        </div>
-
-        {/* FILTROS */}
-        <div className="flex gap-2 mb-10 overflow-x-auto pb-2 scrollbar-hide">
-          {["Todos", "Bebês", "Adultos", "Idosos"].map(tipo => (
-            <button 
-              key={tipo}
-              onClick={() => setFiltroIdade(tipo)}
-              className={`px-6 py-2.5 rounded-full font-bold text-sm whitespace-nowrap border transition-all ${filtroIdade === tipo ? 'bg-vitta-primary text-white border-vitta-primary shadow-md' : 'bg-white text-slate-500 border-slate-200'}`}
+        {/* --- MODAL DE DETALHES (POPUP) --- */}
+        {vacinaSelecionado && (
+          <div 
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-all"
+            onClick={() => setVacinaSelecionado(null)}
+          >
+            {/* Reduzi o max-w para 'md' (mais estreito) e ajustei o padding */}
+            <div 
+              className="bg-white w-full max-w-lg rounded-[2rem] shadow-2xl relative animate-in zoom-in-95 duration-200 flex flex-col max-h-[85vh]"
+              onClick={(e) => e.stopPropagation()}
             >
-              {tipo}
-            </button>
-          ))}
-        </div>
-
-        {/* LISTA RESPONSIVA */}
-        <div className="grid gap-4">
-          {vacinasFiltradas.map(vacina => (
-            <div key={vacina.id} className="bg-white p-5 md:p-8 rounded-[2rem] md:rounded-[3rem] border border-slate-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
-              
-              <div className="flex items-center gap-4 md:gap-6 w-full md:w-auto">
-                <div className="flex-shrink-0 w-14 h-14 md:w-20 md:h-20 bg-vitta-light/10 rounded-2xl flex items-center justify-center text-vitta-primary">
-                  <Syringe size={28} />
+              {/* Botão Fechar fixo no topo */}
+              <button 
+                onClick={() => setVacinaSelecionado(null)}
+                className="absolute top-4 right-4 z-10 p-2 bg-slate-100 rounded-full text-slate-400 hover:text-slate-600 transition-colors"
+              >
+                <X size={18} />
+              </button>
+  
+              {/* Conteúdo com Scroll Interno para não esticar o modal */}
+              <div className="p-8 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200">
+                <div className="mb-6">
+                  <span className="text-[9px] font-black uppercase tracking-[0.15em] bg-vitta-light/10 text-vitta-primary px-2.5 py-1 rounded-md">
+                    {vacinaSelecionado.categoria}
+                  </span>
+                  <h3 className="text-2xl font-black text-slate-900 mt-3 leading-tight">
+                    {vacinaSelecionado.nome}
+                  </h3>
                 </div>
-                <div className="flex flex-col flex-1">
-                  <h3 className="font-black text-slate-800 text-base md:text-xl leading-tight">{vacina.nome}</h3>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    <span className="text-[9px] font-black uppercase tracking-widest bg-slate-100 px-2 py-1 rounded text-slate-500">{vacina.publico}</span>
-                    <span className="text-[9px] font-black uppercase tracking-widest bg-emerald-50 px-2 py-1 rounded text-emerald-600 font-bold">Taxa Zero</span>
+  
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                      <Info size={14} className="text-vitta-primary" /> Orientações
+                    </h4>
+                    {/* Texto levemente menor para caber melhor */}
+                    <p className="text-slate-600 text-[13px] leading-relaxed font-medium whitespace-pre-wrap border-l-2 border-slate-100 pl-4">
+                      {vacinaSelecionado.detalhes || "Informações de preparo disponíveis via WhatsApp."}
+                    </p>
+                  </div>
+  
+                  <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-center">
+                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Valor Particular</span>
+                    <p className="text-3xl font-black text-vitta-primary mt-1">{vacinaSelecionado.preco}</p>
                   </div>
                 </div>
               </div>
-              
-              <div className="flex items-center justify-between md:justify-end w-full md:w-auto gap-4 pt-3 md:pt-0 border-t md:border-t-0 border-slate-50">
-                <div className="text-left md:text-right">
-                  <span className="block text-[9px] font-black text-slate-400 uppercase">Particular</span>
-                  <span className="text-lg md:text-2xl font-black text-vitta-primary">{vacina.preco}</span>
-                </div>
+  
+              {/* Botão de Agendar fixo no rodapé do modal */}
+              <div className="p-6 border-t border-slate-50">
                 <button 
-                  onClick={() => agendarPeloZap(vacina.nome)}
-                  className="bg-vitta-primary text-white flex items-center justify-center gap-2 px-6 h-12 md:w-24 md:h-24 rounded-xl md:rounded-[2rem] hover:bg-emerald-600 transition-all cursor-pointer shadow-lg shadow-vitta-primary/20"
+                  onClick={() => agendarZap(vacinaSelecionado.nome)}
+                  className="w-full bg-vitta-primary text-white font-black py-4 rounded-xl hover:bg-emerald-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-vitta-primary/20"
                 >
                   <MessageCircle size={20} />
-                  <span className="text-xs font-black uppercase md:hidden">Agendar</span>
+                  AGENDAR PELO WHATSAPP
                 </button>
               </div>
             </div>
-          ))}
-        </div>
-      </main>
-    </div>
-  );
-}
+          </div>
+        )}
+
+        {/* --- CONTEÚDO DA PÁGINA --- */}
+              <main className="pt-32 md:pt-48 pb-20 px-4 md:px-6 max-w-5xl mx-auto">
+                
+                <div className="mb-10">
+                  <Link to="/" className="inline-flex items-center gap-2 text-vitta-primary font-bold mb-6 hover:opacity-70 transition-all">
+                    <ArrowLeft size={20} /> Voltar para o início
+                  </Link>
+                  <h2 className="text-4xl md:text-6xl font-black text-slate-900 leading-tight">
+                    Busca de <br/><span className="text-vitta-light italic font-serif">Vacinas.</span>
+                  </h2>
+                </div>
+        
+                <div className="mb-8 relative">
+                  <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={24} />
+                  <input 
+                    type="text" 
+                    placeholder="Qual vacina você precisa hoje?"
+                    className="w-full bg-white border-2 border-slate-100 rounded-[2rem] md:rounded-[3rem] py-6 md:py-8 pl-16 pr-8 text-lg font-semibold outline-none focus:border-vitta-primary shadow-sm transition-all shadow-slate-200/50"
+                    value={busca}
+                    onChange={(e) => setBusca(e.target.value)}
+                  />
+                </div>
+        
+                {carregando ? (
+                  <div className="flex flex-col justify-center items-center py-32 text-vitta-primary gap-4">
+                    <Loader2 className="animate-spin" size={56} />
+                    <p className="font-black uppercase tracking-[0.2em] text-xs">Sincronizando Vacinas...</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex gap-3 mb-12 overflow-x-auto pb-4 scrollbar-hide px-2">
+                      {categorias.map(cat => (
+                        <button 
+                          key={cat}
+                          onClick={() => setFiltroCat(cat)}
+                          className={`px-10 py-4 rounded-full font-bold text-sm whitespace-nowrap border transition-all ${
+                            filtroCat === cat 
+                            ? 'bg-vitta-primary text-white border-vitta-primary shadow-lg shadow-vitta-primary/30 scale-105' 
+                            : 'bg-white text-slate-500 border-slate-200 hover:border-vitta-primary hover:text-vitta-primary'
+                          }`}
+                        >
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+        
+                    <div className="grid gap-6">
+                      {vacinasFiltrados.length > 0 ? (
+                        vacinasFiltrados.map((vacina, index) => (
+                          <div 
+                          key={vacina.id || index} 
+                          className="bg-white p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] border border-slate-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4 hover:shadow-md transition-all group"
+                        >
+                          {/* Lado Esquerdo: Ícone e Títulos */}
+                          <div className="flex items-center gap-4 md:gap-6 w-full md:w-auto">
+                            {/* Ícone Reduzido */}
+                            <div className="flex-shrink-0 w-12 h-12 md:w-16 md:h-16 bg-vitta-light/10 rounded-2xl flex items-center justify-center text-vitta-primary font-bold group-hover:scale-105 transition-transform">
+                              <TestTube2 size={24} />
+                            </div>
+                            
+                            <div className="flex flex-col flex-1">
+                              <h3 className="font-black text-slate-800 text-base md:text-lg leading-tight">
+                                {vacina.nome}
+                              </h3>
+                              <div className="flex flex-wrap gap-2 mt-2 items-center">
+                                <span className="text-[9px] font-black uppercase tracking-widest bg-slate-100 px-2 py-1 rounded text-slate-500">
+                                  {vacina.categoria}
+                                </span>
+                                
+                                {/* Botão Detalhes sutil */}
+                                <button 
+                                  onClick={() => setVacinaSelecionado(vacina)}
+                                  className="text-[9px] font-black uppercase tracking-widest text-vitta-primary border border-vitta-primary/20 hover:border-vitta-primary px-2 py-1 rounded transition-all flex items-center gap-1"
+                                >
+                                  <Info size={12} />
+                                  Detalhes
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Lado Direito: Preço e Botão */}
+                          <div className="flex items-center justify-between md:justify-end w-full md:w-auto gap-6 pt-3 md:pt-0 border-t md:border-t-0 border-slate-50">
+                            <div className="text-left md:text-right">
+                              <span className="block text-[9px] font-black text-slate-400 uppercase tracking-widest">Valor</span>
+                              <span className="text-lg md:text-xl font-black text-vitta-primary">{vacina.preco}</span>
+                            </div>
+                            
+                            {/* Botão Retangular em vez de Quadrado */}
+                            <button 
+                              onClick={() => agendarZap(vacina.nome)}
+                              className="bg-vitta-primary text-white flex items-center justify-center gap-2 px-6 h-12 md:h-14 rounded-xl hover:bg-emerald-600 transition-all shadow-md shadow-vitta-primary/10"
+                            >
+                              <MessageCircle size={18} />
+                              <span className="text-xs font-black uppercase">Agendar</span>
+                            </button>
+                          </div>
+                        </div>
+          
+                        ))
+                      ) : (
+                        <div className="text-center py-24 bg-white rounded-[4rem] border-2 border-dashed border-slate-100">
+                          <p className="text-slate-400 font-bold text-lg">Nenhuma vacina encontrada para "{busca}"</p>
+                          <button onClick={() => setBusca("")} className="text-vitta-primary font-black mt-4 underline decoration-2 underline-offset-4">Limpar todos os filtros</button>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+              </main>
+            </div>
+          );
+        }
