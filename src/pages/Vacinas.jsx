@@ -9,7 +9,7 @@ export default function Vacinas() {
   const [busca, setBusca] = useState("");
   const [filtroIdade, setFiltroIdade] = useState("Todos");
 
-  const WHATSAPP_NUMBER = "5521999999999"; 
+  const WHATSAPP_NUMBER = "5521991992185"; 
 
   const agendarPeloZap = (nome) => {
     const msg = encodeURIComponent(`Olá, VittaGene! Gostaria de agendar a vacina: ${nome}.`);
