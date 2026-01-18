@@ -16,15 +16,16 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-  // Substitua todo o bloco da Navbar por este:
+// --- CONFIGURAÇÃO GLOBAL ---
+const WHATSAPP_NUMBER = "5521991992185";
+const abrirWhatsapp = (mensagem) => {
+  const msg = encodeURIComponent(mensagem || "Olá, VittaGene! Gostaria de mais informações.");
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+};
+
+// --- COMPONENTE NAVBAR ---
 function Navbar() {
   const [menuAberto, setMenuAberto] = useState(false);
-  const WHATSAPP_NUMBER = "5521991992185"; // Substitua pelo seu número real
-
-  const agendarZap = () => {
-    const msg = encodeURIComponent("Olá, VittaGene! Gostaria de realizar um agendamento.");
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
-  };
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md z-[1000] border-b border-slate-100 px-6 py-4">
@@ -47,7 +48,7 @@ function Navbar() {
 
         <div className="flex items-center gap-4">
           <button 
-            onClick={agendarZap}
+            onClick={() => abrirWhatsapp("Olá! Gostaria de realizar um agendamento.")}
             className="hidden md:block bg-vitta-primary text-white px-8 py-3 rounded-full font-bold hover:shadow-xl hover:scale-105 transition-all cursor-pointer"
           >
             Agendar
@@ -70,7 +71,7 @@ function Navbar() {
           <Link to="/sobre" className="text-lg font-bold text-slate-700" onClick={() => setMenuAberto(false)}>Sobre</Link>
           <Link to="/contato" className="text-lg font-bold text-slate-700" onClick={() => setMenuAberto(false)}>Contato</Link>
           <button 
-            onClick={() => { agendarZap(); setMenuAberto(false); }}
+            onClick={() => { abrirWhatsapp("Olá! Quero agendar pelo celular."); setMenuAberto(false); }}
             className="bg-vitta-primary text-white w-full py-4 rounded-2xl font-bold"
           >
             Agendar Agora
@@ -81,7 +82,7 @@ function Navbar() {
   );
 }
 
-// --- COMPONENTE FOOTER (Aparece em todas as páginas) ---
+// --- COMPONENTE FOOTER ---
 function Footer() {
   return (
     <footer className="bg-slate-900 text-white pt-16 pb-8 px-6">
@@ -108,8 +109,8 @@ function Footer() {
           <div>
             <h4 className="font-bold mb-6 text-vitta-light uppercase text-xs tracking-widest">Serviços</h4>
             <ul className="space-y-4 text-sm text-slate-400 font-bold">
-              <li><Link to="/exames" className="hover:text-white transition-colors">Exames Laboratoriais</Link></li>
-              <li><Link to="/vacinas" className="hover:text-white transition-colors">Vacinas Domiciliares</Link></li>
+              <li><Link to="/exames" className="hover:text-white transition-colors">Exames</Link></li>
+              <li><Link to="/vacinas" className="hover:text-white transition-colors">Vacinas</Link></li>
               <li><a href="#" className="hover:text-white transition-colors">Check-ups</a></li>
             </ul>
           </div>
@@ -117,9 +118,7 @@ function Footer() {
           <div>
             <h4 className="font-bold mb-6 text-vitta-light uppercase text-xs tracking-widest">Institucional</h4>
             <ul className="space-y-4 text-sm text-slate-400 font-bold">
-              <li><a href="#" className="hover:text-white transition-colors">Quem Somos</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Onde Atendemos</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Privacidade</a></li>
+              <li><Link to="/sobre" className="hover:text-white transition-colors">Quem Somos</Link></li>
             </ul>
           </div>
 
@@ -127,11 +126,15 @@ function Footer() {
             <h4 className="font-bold mb-6 text-vitta-light uppercase text-xs tracking-widest">Contato</h4>
             <div className="flex items-center gap-3 text-slate-400 text-sm font-bold">
               <Phone size={18} />
-              <span>0800 000 0000</span>
+              <span>21 991992185</span>
             </div>
-            <button className="w-full bg-vitta-primary text-white py-3 rounded-xl font-black hover:brightness-110 transition-all cursor-pointer">
+            {/* DIV CLICÁVEL CONFORME SOLICITADO */}
+            <div 
+              onClick={() => abrirWhatsapp("Olá! Gostaria de falar com o atendimento.")}
+              className="w-full bg-vitta-primary text-white py-3 rounded-xl font-black hover:brightness-110 transition-all cursor-pointer text-center"
+            >
               Falar no WhatsApp
-            </button>
+            </div>
           </div>
         </div>
         
@@ -156,81 +159,87 @@ function Home() {
   return (
     <div className="min-h-screen bg-white font-sans antialiased">
       
-      {/* 2. BUSCA (Agora no topo) */}
-<section className="pt-32 md:pt-40 px-6 relative z-20"> {/* Aumentamos o padding top para descer do menu */}
-  <form onSubmit={handleBusca} className="max-w-4xl mx-auto bg-white p-3 md:p-4 rounded-[1.5rem] md:rounded-[2rem] shadow-2xl border border-slate-100 flex flex-col md:flex-row gap-2">
-    <div className="flex-1 flex items-center gap-3 px-4 py-2">
-      <Search className="text-vitta-primary" size={20} />
-      <input 
-        type="text" 
-        value={termoBusca}
-        onChange={(e) => setTermoBusca(e.target.value)}
-        placeholder="Qual exame você procura?" 
-        className="w-full outline-none text-base md:text-lg font-semibold text-slate-700 placeholder:text-slate-400"
-      />
-    </div>
-    <button type="submit" className="bg-vitta-primary text-white px-8 py-4 rounded-xl md:rounded-2xl font-black text-lg hover:brightness-110 transition-all cursor-pointer">
-      Buscar
-    </button>
-  </form>
-</section>
-
-{/* 3. HERO SECTION */}
-<header className="pt-28 md:pt-40 pb-8 md:pb-12 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-  <div className="space-y-6 text-center md:text-left order-2 md:order-1">
-    <h1 className="text-4xl md:text-7xl font-extrabold text-slate-900 leading-tight">
-      O seu código genético revela o caminho para<br/>
-      <span className="text-vitta-light italic font-serif">sua saúde.</span>
-    </h1>
-    <p className="text-lg md:text-xl text-slate-500 font-medium leading-relaxed">
-      Vá além do básico. Realize exames genéticos avançados e laboratoriais de rotina com a tecnologia que o seu corpo merece, no conforto da sua casa.
-    </p>
-    
-    <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-      {/* BOTÃO ATUALIZADO PARA WHATSAPP */}
-      <button 
-        onClick={() => {
-          const msg = encodeURIComponent("Olá, VittaGene! Gostaria de agendar um exame.");
-          window.open(`https://wa.me/5521999999999?text=${msg}`, '_blank');
-        }} 
-        className="bg-vitta-light text-vitta-dark px-10 py-4 rounded-2xl font-black text-lg shadow-lg hover:-translate-y-1 transition-all cursor-pointer"
-      >
-        Agendar
-      </button>
-
-      <button 
-        onClick={() => navigate('/exames')}
-        className="bg-slate-100 text-slate-700 px-10 py-4 rounded-2xl font-black text-lg hover:bg-slate-200 transition-all cursor-pointer"
-      >
-        Ver todos os exames
-      </button>
-    </div>
-  </div>
-
-  <div className="relative order-1 md:order-2">
-    <div className="absolute -inset-2 md:-inset-4 bg-vitta-light/10 rounded-[2rem] md:rounded-[3.5rem] rotate-3" />
-    <div className="relative rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-2xl border-2 md:border-4 border-white h-[250px] md:h-[500px]">
-      <img 
-        src="/imagens/cientista.png"
-        className="w-full h-full object-cover" 
-        alt="Atendimento VittaGene" 
-      />
-    </div>
-  </div>
-</header>
-
-
-      {/* 4. QUICK CARDS */}
-      <section className="py-8 md:py-16 px-6">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
-          <QuickCard title="Resultados" icon={<ShieldCheck />} />
-          <QuickCard title="Preços" icon={<Calendar />} />
-          <QuickCard title="Onde atendemos" icon={<MapPin />} />
-          <QuickCard title="Fale Conosco" icon={<Phone />} />
-        </div>
+      {/* BUSCA */}
+      <section className="pt-32 md:pt-40 px-6 relative z-20">
+        <form onSubmit={handleBusca} className="max-w-4xl mx-auto bg-white p-3 md:p-4 rounded-[1.5rem] md:rounded-[2rem] shadow-2xl border border-slate-100 flex flex-col md:flex-row gap-2">
+          <div className="flex-1 flex items-center gap-3 px-4 py-2">
+            <Search className="text-vitta-primary" size={20} />
+            <input 
+              type="text" 
+              value={termoBusca}
+              onChange={(e) => setTermoBusca(e.target.value)}
+              placeholder="Qual exame você procura?" 
+              className="w-full outline-none text-base md:text-lg font-semibold text-slate-700 placeholder:text-slate-400"
+            />
+          </div>
+          <button type="submit" className="bg-vitta-primary text-white px-8 py-4 rounded-xl md:rounded-2xl font-black text-lg hover:brightness-110 transition-all cursor-pointer">
+            Buscar
+          </button>
+        </form>
       </section>
 
-      {/* 5. BANNER ROTATIVO */}
+      {/* HERO SECTION */}
+      <header className="pt-28 md:pt-40 pb-8 md:pb-12 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+        <div className="space-y-6 text-center md:text-left order-2 md:order-1">
+          <h1 className="text-4xl md:text-7xl font-extrabold text-slate-900 leading-tight">
+            O seu código genético revela o caminho para<br/>
+            <span className="text-vitta-light italic font-serif">sua saúde.</span>
+          </h1>
+          <p className="text-lg md:text-xl text-slate-500 font-medium leading-relaxed">
+            Vá além do básico. Realize exames genéticos avançados e laboratoriais de rotina com a tecnologia que o seu corpo merece, no conforto da sua casa.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+            <button 
+              onClick={() => abrirWhatsapp("Olá! Gostaria de agendar um exame através do site.")} 
+              className="bg-vitta-light text-vitta-dark px-10 py-4 rounded-2xl font-black text-lg shadow-lg hover:-translate-y-1 transition-all cursor-pointer"
+            >
+              Agendar
+            </button>
+            <button 
+              onClick={() => navigate('/exames')}
+              className="bg-slate-100 text-slate-700 px-10 py-4 rounded-2xl font-black text-lg hover:bg-slate-200 transition-all cursor-pointer"
+            >
+              Ver todos os exames
+            </button>
+          </div>
+        </div>
+
+        <div className="relative order-1 md:order-2">
+          <div className="absolute -inset-2 md:-inset-4 bg-vitta-light/10 rounded-[2rem] md:rounded-[3.5rem] rotate-3" />
+          <div className="relative rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-2xl border-2 md:border-4 border-white h-[250px] md:h-[500px]">
+            <img 
+              src="/imagens/cientista.png"
+              className="w-full h-full object-cover" 
+              alt="Atendimento VittaGene" 
+            />
+          </div>
+        </div>
+      </header>
+
+      {/* QUICK CARDS */}
+        <section className="py-8 md:py-16 px-6">
+          <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+            <QuickCard 
+              title="Resultados" 
+              icon={<ShieldCheck />}
+              onClick={() => abrirWhatsapp("Olá! preciso do resultado do meu exame.")} />
+            <QuickCard 
+              title="Preços" 
+              icon={<Calendar />} 
+              onClick={() => navigate('/exames')} />
+            <QuickCard 
+              title="Onde estamos localizados"
+              icon={<MapPin />}
+              onClick={() => navigate('\contato')} />
+            <QuickCard 
+              title="Fale Conosco" 
+              icon={<Phone />} 
+              onClick={() => abrirWhatsapp("Olá! Vi a opção Fale Conosco no site.")} />
+          </div>
+        </section>
+
+      {/* BANNER ROTATIVO */}
       <section className="pb-20 px-6">
         <div className="max-w-7xl mx-auto">
           <Swiper
@@ -247,7 +256,12 @@ function Home() {
                 <div className="z-10 space-y-4 max-w-2xl text-left">
                   <h2 className="text-3xl md:text-5xl font-black leading-tight">Ano novo,<br/>saúde em dia!</h2>
                   <p className="text-sm md:text-lg opacity-90 font-medium">Exames em casa.</p>
-                  <button className="bg-[#FF9F00] px-8 py-3 rounded-full font-black uppercase text-xs md:text-sm shadow-lg cursor-pointer">Agendar Agora</button>
+                  <button 
+                    onClick={() => abrirWhatsapp("Olá! Vi o banner de Ano Novo e quero agendar exames.")}
+                    className="bg-[#FF9F00] px-8 py-3 rounded-full font-black uppercase text-xs md:text-sm shadow-lg cursor-pointer"
+                  >
+                    Agendar Agora
+                  </button>
                 </div>
               </div>
             </SwiperSlide>
@@ -256,16 +270,20 @@ function Home() {
                 <div className="z-10 space-y-4 max-w-2xl text-left">
                   <h2 className="text-3xl md:text-5xl font-black leading-tight">Vacinação sem <br/><span className="text-vitta-primary">sair de casa</span></h2>
                   <p className="text-sm md:text-lg opacity-80 font-bold">Proteção para toda a família com carinho e conforto.</p>
-                  <button className="bg-vitta-primary text-white px-8 py-3 rounded-full font-black uppercase text-xs md:text-sm shadow-lg cursor-pointer">Ver Vacinas</button>
+                  <button 
+                    onClick={() => navigate('/vacinas')}
+                    className="bg-vitta-primary text-white px-8 py-3 rounded-full font-black uppercase text-xs md:text-sm shadow-lg cursor-pointer"
+                  >
+                    Ver Vacinas
+                  </button>
                 </div>
               </div>
             </SwiperSlide>
-            {/* ... Outros banners omitidos para brevidade mas mantendo a lógica ... */}
           </Swiper>
         </div>
       </section>
 
-      {/* 6. PASSO A PASSO */}
+      {/* PASSO A PASSO */}
       <section className="py-20 px-6 bg-slate-50">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-5xl font-black text-center mb-16 text-slate-900">Agende em até <span className="text-vitta-light">3 minutos!</span></h2>
@@ -287,7 +305,7 @@ function Home() {
         </div>
       </section>
 
-      {/* 7. FAQ */}
+      {/* FAQ */}
       <section className="py-20 px-6 bg-white">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-black mb-12 text-slate-900">Dúvidas Frequentes</h2>
@@ -301,11 +319,11 @@ function Home() {
   );
 }
 
-// --- COMPONENTE PRINCIPAL (CONFIGURAÇÃO DE ROTAS) ---
+// --- APP ---
 export default function App() {
   return (
     <Router>
-      <Navbar /> {/* O menu agora é global */}
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/exames" element={<Exames />} />
@@ -313,15 +331,18 @@ export default function App() {
         <Route path="/contato" element={<Contato />} />
         <Route path="/sobre" element={<Sobre />} />
       </Routes>
-      <Footer /> {/* O rodapé agora é global */}
+      <Footer />
     </Router>
   );
 }
 
-// --- COMPONENTES AUXILIARES ---
-function QuickCard({ title, icon }) {
+// --- AUXILIARES ---
+function QuickCard({ title, icon, onClick }) {
   return (
-    <div className="bg-white p-4 md:p-6 rounded-[1.5rem] border border-slate-100 flex flex-col items-center gap-3 hover:shadow-lg hover:-translate-y-1 transition-all cursor-pointer shadow-sm">
+    <div 
+      onClick={onClick}
+      className="bg-white p-4 md:p-6 rounded-[1.5rem] border border-slate-100 flex flex-col items-center gap-3 hover:shadow-lg hover:-translate-y-1 transition-all cursor-pointer shadow-sm"
+    >
       <div className="text-vitta-primary p-3 bg-slate-50 rounded-2xl">{React.cloneElement(icon, { size: 24 })}</div>
       <span className="font-bold text-slate-800 text-[10px] md:text-xs uppercase tracking-tight text-center">{title}</span>
     </div>

@@ -23,3 +23,6 @@ git push
 
 baixar repositório 
 git clone https://github.com/Tiagdv/SiteVittaGene.git
+
+atualizar o codigo na maquina atual depois do clone 
+git pull origin main
