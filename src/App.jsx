@@ -128,7 +128,6 @@ function Footer() {
               <Phone size={18} />
               <span>21 991992185</span>
             </div>
-            {/* DIV CLICÁVEL CONFORME SOLICITADO */}
             <div 
               onClick={() => abrirWhatsapp("Olá! Gostaria de falar com o atendimento.")}
               className="w-full bg-vitta-primary text-white py-3 rounded-xl font-black hover:brightness-110 transition-all cursor-pointer text-center"
@@ -297,7 +296,7 @@ function Home() {
              </div>
              <div className="space-y-4">
                 <StepCardWhite n="1" t="Na palma da sua mão" d="Faça tudo pelo nosso site ou app de forma prática e segura." />
-                <StepCardWhite n="2" t="Escolha o serviço" d="Você pode agendar exames e vacinas, pelo plano ou particular." />
+                <StepCardWhite n="2" t="Escolha o serviço" d="Você pode agendar exames e vacinas." />
                 <StepCardWhite n="3" t="Agende a visita" d="Escolha o melhor dia e horário para cuidar da saúde dentro da sua rotina." />
                 <StepCardWhite n="4" t="Pronto! Vamos até você" d="Receba o cuidado sem filas, sem trânsito e sem sair de casa." />
              </div>
@@ -310,8 +309,11 @@ function Home() {
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-black mb-12 text-slate-900">Dúvidas Frequentes</h2>
           <div className="space-y-4 text-left">
-            <FAQItem question="Atendem meu convênio?" answer="Atendemos mais de 40 planos de saúde. Você pode verificar a cobertura completa durante o agendamento." />
+            <FAQItem question="Como funciona o atendimento domiciliar?" answer="É simples! Você agenda pelo site ou WhatsApp, e um de nossos profissionais especializados vai até sua casa ou escritório no horário marcado para realizar a coleta ou aplicação, com todo o material necessário e seguindo rigorosos protocolos de segurança." />
+            <FAQItem question="Preciso de pedido médico para realizar os exames?" answer="Para exames particulares e check-ups preventivos, alguns procedimentos podem ser realizados sem pedido, mas recomendamos sempre consultar nossa equipe pelo WhatsApp para confirmar a exigência específica do seu exame." />
             <FAQItem question="Como recebo meus resultados?" answer="Seus resultados são enviados por WhatsApp, e-mail e ficam disponíveis no nosso portal exclusivo." />
+            <FAQItem question=" Existe taxa de deslocamento para a coleta em casa?" answer="Nossa taxa de visita varia de acordo com a sua localização. No entanto, oferecemos condições especiais e isenção de taxa para determinados volumes de exames ou campanhas promocionais. Consulte seu CEP com nossos atendentes." />
+            <FAQItem question="Como devo me preparar para o exame (jejum)?" answer="O preparo varia para cada tipo de análise. Atualmente, muitos exames de sangue não exigem mais o jejum prolongado, mas outros sim. Assim que você realizar o agendamento, enviaremos uma guia completa com as instruções específicas para o seu procedimento." />    
           </div>
         </div>
       </section>
