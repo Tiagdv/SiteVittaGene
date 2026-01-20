@@ -33,7 +33,7 @@ export default function Sobre() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
             <button 
               onClick={() => abrirWhatsapp("Olá! Gostaria de agendar um exame através do site.")} 
-              className="bg-vitta-light text-vitta-dark px-10 py-4 rounded-2xl font-black text-lg shadow-lg hover:-translate-y-1 transition-all cursor-pointer"
+              className="bg-vitta-primary text-white px-10 py-4 rounded-2xl font-black text-lg shadow-lg hover:-translate-y-1 transition-all cursor-pointer"
             >
               Agendar
             </button>
