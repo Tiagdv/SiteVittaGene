@@ -4,21 +4,18 @@ import {
   Search, MapPin, Phone, ShieldCheck, Calendar, ArrowRight 
 } from 'lucide-react';
 
-// Imports do Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-// --- CONFIGURAÇÃO ---
 const WHATSAPP_NUMBER = "5521991992185";
 const abrirWhatsapp = (mensagem) => {
   const msg = encodeURIComponent(mensagem || "Olá, VittaGene! Gostaria de mais informações.");
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
 };
 
-// --- COMPONENTES AUXILIARES (EXCLUSIVOS DA HOME) ---
 function QuickCard({ title, icon, onClick }) {
   return (
     <div 
@@ -62,7 +59,6 @@ function FAQItem({ question, answer }) {
   );
 }
 
-// --- PÁGINA HOME ---
 export default function Home() {
   const navigate = useNavigate();
   const [termoBusca, setTermoBusca] = useState("");
@@ -75,7 +71,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white font-sans antialiased">
       
-      {/* BUSCA */}
       <section className="pt-32 md:pt-40 px-6 relative z-20">
         <form onSubmit={handleBusca} className="max-w-4xl mx-auto bg-white p-3 md:p-4 rounded-[1.5rem] md:rounded-[2rem] shadow-2xl border border-slate-100 flex flex-col md:flex-row gap-2">
           <div className="flex-1 flex items-center gap-3 px-4 py-2">
@@ -94,12 +89,11 @@ export default function Home() {
         </form>
       </section>
 
-      {/* HERO SECTION */}
       <header className="pt-16 md:pt-24 pb-8 md:pb-12 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center">
         <div className="space-y-6 text-center md:text-left order-2 md:order-1">
           <h1 className="text-4xl md:text-7xl font-extrabold text-slate-900 leading-tight">
             O seu código genético revela o caminho para<br/>
-            <span className="text-vitta-light italic font-serif">sua saúde.</span>
+            <span className="text-vitta-primary italic font-serif">sua saúde.</span>
           </h1>
           <p className="text-lg md:text-xl text-slate-500 font-medium leading-relaxed">
             Vá além do básico. Realize exames genéticos avançados e laboratoriais de rotina com a tecnologia que o seu corpo merece, no conforto da sua casa.
@@ -108,7 +102,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
             <button 
               onClick={() => abrirWhatsapp("Olá! Gostaria de agendar um exame através do site.")} 
-              className="bg-vitta-light text-vitta-dark px-10 py-4 rounded-2xl font-black text-lg shadow-lg hover:-translate-y-1 transition-all cursor-pointer"
+              className="bg-vitta-primary text-white px-10 py-4 rounded-2xl font-black text-lg shadow-lg hover:-translate-y-1 transition-all cursor-pointer"
             >
               Agendar
             </button>
@@ -133,7 +127,6 @@ export default function Home() {
         </div>
       </header>
 
-      {/* QUICK CARDS */}
       <section className="py-8 md:py-16 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
           <QuickCard 
@@ -155,7 +148,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* BANNER ROTATIVO */}
       <section className="pb-20 px-6">
         <div className="max-w-7xl mx-auto">
           <Swiper
@@ -199,10 +191,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PASSO A PASSO */}
       <section className="py-20 px-6 bg-slate-50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-5xl font-black text-center mb-16 text-slate-900">Agende em até <span className="text-vitta-light">3 minutos!</span></h2>
+          <h2 className="text-3xl md:text-5xl font-black text-center mb-16 text-slate-900">Agende em até <span className="text-vitta-primary">3 minutos!</span></h2>
           <div className="grid md:grid-cols-2 gap-12 items-center">
              <div className="rounded-[2rem] overflow-hidden shadow-2xl h-[300px] md:h-[500px]">
                 <img 
@@ -216,12 +207,19 @@ export default function Home() {
                 <StepCardWhite n="2" t="Escolha o serviço" d="Você pode agendar exames e vacinas." />
                 <StepCardWhite n="3" t="Agende a visita" d="Escolha o melhor dia e horário para cuidar da saúde dentro da sua rotina." />
                 <StepCardWhite n="4" t="Pronto! Vamos até você" d="Receba o cuidado sem filas, sem trânsito e sem sair de casa." />
-             </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+            <button 
+              onClick={() => abrirWhatsapp("Olá! Gostaria de agendar um exame através do site.")} 
+              className="bg-vitta-primary text-white px-10 py-4 rounded-2xl font-black text-lg shadow-lg hover:-translate-y-1 transition-all cursor-pointer"
+            >
+              Agendar
+            </button>
+            </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
       <section className="py-20 px-6 bg-white">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-black mb-12 text-slate-900">Dúvidas Frequentes</h2>

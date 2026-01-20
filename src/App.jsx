@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Phone, Instagram, Facebook, Linkedin, Menu, X } from 'lucide-react';
-
-// Import das páginas
+import WhatsAppFloating from './components/whatsapp';
 import Home from './pages/Home';
 import Exames from './pages/Exames';
 import Vacinas from './pages/Vacinas';
 import Contato from './pages/Contato';
 import Sobre from './pages/Sobre';
 
-// --- CONFIGURAÇÃO GLOBAL ---
+
 const WHATSAPP_NUMBER = "5521991992185";
 const abrirWhatsapp = (mensagem) => {
   const msg = encodeURIComponent(mensagem || "Olá, VittaGene! Gostaria de mais informações.");
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
 };
 
-// --- COMPONENTE NAVBAR ---
 function Navbar() {
   const [menuAberto, setMenuAberto] = useState(false);
 
@@ -75,7 +73,6 @@ function Navbar() {
   );
 }
 
-// --- COMPONENTE SOCIAL ICON (CLICÁVEL) ---
 function SocialIcon({ icon, href }) {
   return (
     <a 
@@ -89,7 +86,6 @@ function SocialIcon({ icon, href }) {
   );
 }
 
-// --- COMPONENTE FOOTER ---
 function Footer() {
   return (
     <footer className="bg-slate-900 text-white pt-16 pb-8 px-6">
@@ -142,11 +138,11 @@ function Footer() {
   );
 }
 
-// --- APP PRINCIPAL ---
 export default function App() {
   return (
     <Router>
       <Navbar />
+      <WhatsAppFloating />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/exames" element={<Exames />} />

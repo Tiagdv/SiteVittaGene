@@ -60,7 +60,7 @@ export default function Contato() {
           </Link>
           <h2 className="text-4xl md:text-6xl font-black text-slate-900 leading-tight">
             Estamos aqui <br/>
-            <span className="text-vitta-light italic font-serif">para cuidar de você.</span>
+            <span className="text-vitta-primary italic font-serif">para cuidar de você.</span>
           </h2>
         </div>
 

@@ -136,7 +136,7 @@ export default function Exames() {
             <ArrowLeft size={20} /> Voltar para o início
           </Link>
           <h2 className="text-4xl md:text-6xl font-black text-slate-900 leading-tight">
-            Busca de <br/><span className="text-vitta-light italic font-serif">Exames.</span>
+            Busca de <br/><span className="text-vitta-primary italic font-serif">Exames.</span>
           </h2>
         </div>
 
