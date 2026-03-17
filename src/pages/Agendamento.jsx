@@ -77,7 +77,6 @@ const Agendamentos = ({ usuarioEmail }) => {
     }
   };
 
-  // --- LÓGICA DE EDIÇÃO ---
   const iniciarEdicao = (item) => { 
     setEditandoId(item.id); 
     setItemEditado({ ...item }); 
@@ -118,18 +117,18 @@ const Agendamentos = ({ usuarioEmail }) => {
   });
 
   return (
-    <div className="pt-10 pb-20 px-6 max-w-7xl mx-auto font-sans text-slate-800 bg-slate-50 min-h-screen">
+    <div className="pt-6 pb-20 px-4 md:px-6 max-w-7xl mx-auto font-sans text-slate-800 bg-slate-50 min-h-screen">
       {/* Header */}
-      <div className="flex justify-between items-center mb-8 bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-        <h1 className="text-2xl font-bold border-l-4 border-[#006363] pl-4 text-[#006363]">Painel de Coletas Domiciliares</h1>
-        <div className="text-right bg-slate-50 p-2 rounded-lg border border-slate-100">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-8 bg-white p-5 rounded-xl shadow-sm border border-slate-200 gap-4">
+        <h1 className="text-xl md:text-2xl font-bold border-l-4 border-[#006363] pl-4 text-[#006363]">Painel de Coletas Domiciliares</h1>
+        <div className="text-center md:text-right bg-slate-50 p-2 rounded-lg border border-slate-100 w-full md:w-auto">
           <p className="text-[10px] uppercase text-slate-500 font-black mb-1">Operador do Sistema</p>
           <p className="text-sm font-bold text-[#006363]">{usuarioEmail}</p>
         </div>
       </div>
 
       {/* Form de Cadastro */}
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-md border border-slate-200 mb-10">
+      <form onSubmit={handleSubmit} className="bg-white p-6 md:p-8 rounded-xl shadow-md border border-slate-200 mb-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <input type="text" placeholder="Nome Completo do Paciente" className="border-2 rounded-lg p-3 md:col-span-2 outline-none focus:border-[#006363] transition-all" value={form.nome_paciente} onChange={e => setForm({ ...form, nome_paciente: e.target.value })} />
           <input type="tel" placeholder="Telefone de Contato" className="border-2 rounded-lg p-3 outline-none focus:border-[#006363]" value={form.telefone} onChange={e => setForm({ ...form, telefone: e.target.value })} />
@@ -171,7 +170,7 @@ const Agendamentos = ({ usuarioEmail }) => {
             <h2 className="text-sm font-bold uppercase text-slate-500 tracking-wider">Filtros de Busca</h2>
             <button onClick={limparFiltros} className="text-xs text-red-500 hover:underline font-bold">Limpar Filtros</button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           <input type="text" placeholder="Paciente..." className="p-2 border rounded-lg text-sm outline-none focus:border-[#006363]" value={filtroNome} onChange={(e) => setFiltroNome(e.target.value)} />
           <select className="p-2 border rounded-lg text-sm bg-white" value={filtroEquipe} onChange={(e) => setFiltroEquipe(e.target.value)}>
               <option value="">Todos os Colaboradores</option>
@@ -185,23 +184,22 @@ const Agendamentos = ({ usuarioEmail }) => {
         </div>
       </div>
 
-      {/* Tabela */}
+      {/* Tabela Responsiva */}
       <div className="bg-white shadow-2xl rounded-2xl border border-slate-300 overflow-hidden">
-        <table className="w-full text-left border-collapse">
-          <thead className="bg-[#006363] text-white text-xs uppercase tracking-tighter">
+        <table className="w-full text-left border-collapse block md:table">
+          <thead className="bg-[#006363] text-white text-xs uppercase tracking-tighter hidden md:table-header-group">
             <tr>
               <th className="p-5 w-1/4">Cronograma / Equipe</th>
               <th className="p-5 w-1/2">Dados do Paciente e Local</th>
               <th className="p-5 text-center">Gestão</th>
             </tr>
           </thead>
-          <tbody className="divide-y-2 divide-slate-300">
+          <tbody className="divide-y-2 divide-slate-300 block md:table-row-group">
             {agendamentosFiltrados.map((item) => (
-              <tr key={item.id} className="hover:bg-slate-50 transition-colors">
+              <tr key={item.id} className="hover:bg-slate-50 transition-colors flex flex-col md:table-row border-b md:border-b-0 border-slate-200">
                 {editandoId === item.id ? (
-                  // MODO EDIÇÃO: TODOS OS CAMPOS EDITÁVEIS
                   <>
-                    <td className="p-5 align-top border-r border-slate-100 space-y-2 bg-blue-50/30">
+                    <td className="p-4 md:p-5 align-top md:border-r border-slate-100 space-y-2 bg-blue-50/30 block md:table-cell">
                       <input type="date" className="w-full border p-2 rounded text-sm font-bold" value={itemEditado.dia} onChange={e => setItemEditado({...itemEditado, dia: e.target.value})} />
                       <input type="time" className="w-full border p-2 rounded text-sm font-bold" value={itemEditado.hora} onChange={e => setItemEditado({...itemEditado, hora: e.target.value})} />
                       <div className="space-y-1">
@@ -213,11 +211,11 @@ const Agendamentos = ({ usuarioEmail }) => {
                         </select>
                       </div>
                     </td>
-                    <td className="p-5 align-top space-y-2 bg-blue-50/30">
+                    <td className="p-4 md:p-5 align-top space-y-2 bg-blue-50/30 block md:table-cell">
                       <input type="text" className="w-full border p-2 rounded font-black uppercase text-lg" value={itemEditado.nome_paciente} onChange={e => setItemEditado({...itemEditado, nome_paciente: e.target.value})} />
-                      <div className="flex gap-2">
-                        <input type="text" className="w-1/2 border p-1 rounded text-sm" value={itemEditado.telefone} onChange={e => setItemEditado({...itemEditado, telefone: e.target.value})} />
-                        <input type="text" className="w-1/2 border p-1 rounded text-sm" value={itemEditado.exame} onChange={e => setItemEditado({...itemEditado, exame: e.target.value})} />
+                      <div className="flex flex-wrap gap-2">
+                        <input type="text" className="flex-1 border p-1 rounded text-sm" value={itemEditado.telefone} onChange={e => setItemEditado({...itemEditado, telefone: e.target.value})} />
+                        <input type="text" className="flex-1 border p-1 rounded text-sm" value={itemEditado.exame} onChange={e => setItemEditado({...itemEditado, exame: e.target.value})} />
                       </div>
                       <textarea className="w-full border p-2 rounded text-sm font-bold" rows="2" value={itemEditado.endereco} onChange={e => setItemEditado({...itemEditado, endereco: e.target.value})} />
                       <div className="flex gap-2 items-center">
@@ -229,15 +227,14 @@ const Agendamentos = ({ usuarioEmail }) => {
                         </select>
                       </div>
                     </td>
-                    <td className="p-5 text-center align-middle bg-blue-50/50 border-l border-slate-100">
+                    <td className="p-4 md:p-5 text-center align-middle bg-blue-50/50 md:border-l border-slate-100 block md:table-cell">
                       <button onClick={() => salvarEdicao(item.id)} className="w-full bg-green-600 text-white py-2 rounded shadow-md font-bold text-xs mb-2 hover:bg-green-700">SALVAR</button>
                       <button onClick={() => setEditandoId(null)} className="w-full bg-slate-400 text-white py-2 rounded shadow-md font-bold text-xs hover:bg-slate-500">CANCELAR</button>
                     </td>
                   </>
                 ) : (
-                  // MODO VISUALIZAÇÃO ORIGINAL
                   <>
-                    <td className="p-5 align-top border-r border-slate-100">
+                    <td className="p-4 md:p-5 align-top md:border-r border-slate-100 block md:table-cell">
                       <div className="text-lg font-black text-[#006363] mb-2">
                         {formatarDataBR(item.dia)} <span className="text-slate-400 font-normal">às</span> {item.hora}
                       </div>
@@ -246,13 +243,13 @@ const Agendamentos = ({ usuarioEmail }) => {
                         <p className="text-sm font-bold text-slate-800">{item.motorista} & {item.coletora}</p>
                       </div>
                     </td>
-                    <td className="p-5 align-top">
+                    <td className="p-4 md:p-5 align-top block md:table-cell">
                       <div className="font-black text-slate-900 uppercase text-lg mb-1 leading-tight">
                         {item.nome_paciente}
                       </div>
-                      <div className="flex gap-3 text-sm font-bold text-slate-600 mb-3 bg-teal-50 w-fit px-2 py-0.5 rounded border border-teal-100">
+                      <div className="flex flex-wrap gap-3 text-sm font-bold text-slate-600 mb-3 bg-teal-50 w-fit px-2 py-0.5 rounded border border-teal-100">
                         <span>📞 {item.telefone}</span>
-                        <span className="text-teal-200">|</span>
+                        <span className="hidden md:inline text-teal-200">|</span>
                         <span className="uppercase">🔬 {item.exame}</span>
                       </div>
                       <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-3 shadow-sm">
@@ -264,10 +261,10 @@ const Agendamentos = ({ usuarioEmail }) => {
                         <div className="bg-slate-800 text-white text-[11px] font-bold px-2 py-1 rounded uppercase tracking-wider">{item.pagamento}</div>
                       </div>
                     </td>
-                    <td className="p-5 text-center align-top bg-slate-50/30 border-l border-slate-100">
-                        <div className="flex justify-center gap-3 mb-6">
-                          <button onClick={() => iniciarEdicao(item)} className="bg-blue-600 text-white px-4 py-2 rounded shadow-md font-bold text-xs hover:bg-blue-700">EDITAR</button>
-                          <button onClick={() => deletarAgendamento(item.id)} className="bg-red-500 text-white px-4 py-2 rounded shadow-md font-bold text-xs hover:bg-red-600">EXCLUIR</button>
+                    <td className="p-4 md:p-5 text-center align-top bg-slate-50/30 md:border-l border-slate-100 block md:table-cell">
+                        <div className="flex justify-center gap-3 mb-4 md:mb-6">
+                          <button onClick={() => iniciarEdicao(item)} className="flex-1 md:flex-none bg-blue-600 text-white px-4 py-2 rounded shadow-md font-bold text-xs hover:bg-blue-700">EDITAR</button>
+                          <button onClick={() => deletarAgendamento(item.id)} className="flex-1 md:flex-none bg-red-500 text-white px-4 py-2 rounded shadow-md font-bold text-xs hover:bg-red-600">EXCLUIR</button>
                         </div>
                         <div className="border-t border-slate-200 pt-3">
                           <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Agendado por:</p>
