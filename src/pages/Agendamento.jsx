@@ -380,7 +380,8 @@ const Agendamentos = ({ usuarioEmail }) => {
                                 <option value="Pix">Pix</option>
                                 <option value="Cartão">Cartão</option>
                                 <option value="Dinheiro">Dinheiro</option>
-                                <option value="Convênio">Convênio</option>
+                                <option value="Pago">Pago</option>
+                                <option value="Convênio">Faturamento Convênio</option>
                             </select>
                           </div>
                       </div>
