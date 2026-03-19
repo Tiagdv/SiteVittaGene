@@ -260,6 +260,7 @@ const Agendamentos = ({ usuarioEmail }) => {
                 <option value="Pix">Pix</option>
                 <option value="Cartão">Cartão</option>
                 <option value="Dinheiro">Dinheiro</option>
+                <option value="Convênio">Pago</option>
                 <option value="Convênio">Faturado Convênio</option>
             </select>
           </div>
