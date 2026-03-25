@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 import { Phone, Instagram, Facebook, Linkedin, Menu, X, User } from 'lucide-react';
 import { supabase } from './supabaseClient';
 import WhatsAppFloating from './components/whatsapp';
@@ -10,6 +10,9 @@ import Contato from './pages/Contato';
 import Sobre from './pages/Sobre';
 import Agendamento from './pages/Agendamento';
 import Login from './components/Login';
+import Financeiro from './pages/Financeiro';
+import Dashboard from './pages/Dashboard';
+import { ModalDirecionamento } from './components/ModalDirecionamento';
 
 const WHATSAPP_NUMBER = "5521991992185";
 const abrirWhatsapp = (mensagem) => {
@@ -32,11 +35,11 @@ function Navbar({ session, onLogout }) {
         </Link>
 
         <div className="hidden md:flex gap-8 font-bold text-slate-600 text-sm items-center">
-          <Link to="/" className="hover:text-vitta-primary transition-colors uppercase">Home</Link>
-          <Link to="/exames" className="hover:text-vitta-primary transition-colors uppercase">Exames</Link>
-          <Link to="/vacinas" className="hover:text-vitta-primary transition-colors uppercase">Vacinas</Link>
-          <Link to="/sobre" className="hover:text-vitta-primary transition-colors uppercase">Sobre</Link>
-          <Link to="/contato" className="hover:text-vitta-primary transition-colors uppercase">Contato</Link>
+          <Link to="/" className="hover:text-[#006363] transition-colors uppercase">Home</Link>
+          <Link to="/exames" className="hover:text-[#006363] transition-colors uppercase">Exames</Link>
+          <Link to="/vacinas" className="hover:text-[#006363] transition-colors uppercase">Vacinas</Link>
+          <Link to="/sobre" className="hover:text-[#006363] transition-colors uppercase">Sobre</Link>
+          <Link to="/contato" className="hover:text-[#006363] transition-colors uppercase">Contato</Link>
           
           {session && (
             <Link to="/agendamento" className="text-[#006363] hover:opacity-80 transition-opacity uppercase font-black border-l pl-4 border-slate-200">Painel</Link>
@@ -62,13 +65,13 @@ function Navbar({ session, onLogout }) {
 
           <button 
             onClick={() => abrirWhatsapp("Olá! Gostaria de realizar um agendamento.")}
-            className="hidden md:block bg-vitta-primary text-white px-8 py-3 rounded-full font-bold hover:shadow-xl hover:scale-105 transition-all cursor-pointer"
+            className="hidden md:block bg-[#006363] text-white px-8 py-3 rounded-full font-bold hover:shadow-xl hover:scale-105 transition-all cursor-pointer"
           >
             Agendar
           </button>
           
           <button 
-            className="md:hidden text-vitta-primary p-2 cursor-pointer"
+            className="md:hidden text-[#006363] p-2 cursor-pointer"
             onClick={() => setMenuAberto(!menuAberto)}
           >
             {menuAberto ? <X size={28} /> : <Menu size={28} />}
@@ -88,7 +91,7 @@ function Navbar({ session, onLogout }) {
           )}
           <button 
             onClick={() => { abrirWhatsapp("Olá! Quero agendar pelo celular."); setMenuAberto(false); }}
-            className="bg-vitta-primary text-white w-full py-4 rounded-2xl font-bold"
+            className="bg-[#006363] text-white w-full py-4 rounded-2xl font-bold"
           >
             Agendar Agora
           </button>
@@ -104,7 +107,7 @@ function SocialIcon({ icon, href }) {
       href={href} 
       target="_blank" 
       rel="noopener noreferrer"
-      className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-white hover:bg-vitta-primary transition-all cursor-pointer"
+      className="w-10 h-10 bg-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#006363] transition-all cursor-pointer"
     >
       {icon}
     </a>
@@ -127,7 +130,7 @@ function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold mb-6 text-vitta-light uppercase text-xs tracking-widest">Serviços</h4>
+            <h4 className="font-bold mb-6 text-white uppercase text-xs tracking-widest">Serviços</h4>
             <ul className="space-y-4 text-sm text-slate-400 font-bold">
               <li><Link to="/exames">Exames</Link></li>
               <li><Link to="/vacinas">Vacinas</Link></li>
@@ -135,21 +138,21 @@ function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold mb-6 text-vitta-light uppercase text-xs tracking-widest">Institucional</h4>
+            <h4 className="font-bold mb-6 text-white uppercase text-xs tracking-widest">Institucional</h4>
             <ul className="space-y-4 text-sm text-slate-400 font-bold">
               <li><Link to="/sobre">Quem Somos</Link></li>
             </ul>
           </div>
 
           <div className="space-y-6">
-            <h4 className="font-bold mb-6 text-vitta-light uppercase text-xs tracking-widest">Contato</h4>
+            <h4 className="font-bold mb-6 text-white uppercase text-xs tracking-widest">Contato</h4>
             <div className="flex items-center gap-3 text-slate-400 text-sm font-bold">
               <Phone size={18} />
               <span>21 991992185</span>
             </div>
             <button 
               onClick={() => abrirWhatsapp()}
-              className="w-full bg-vitta-primary text-white py-3 rounded-xl font-black hover:brightness-110 transition-all"
+              className="w-full bg-[#006363] text-white py-3 rounded-xl font-black hover:brightness-110 transition-all"
             >
               Falar no WhatsApp
             </button>
@@ -163,63 +166,116 @@ function Footer() {
   );
 }
 
-export default function App() {
+function AppContent() {
   const [session, setSession] = useState(null);
+  const [perfil, setPerfil] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      if (session) buscarPerfil(session.user.id);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      if (session) {
+        buscarPerfil(session.user.id);
+      } else {
+        setPerfil(null);
+        setShowModal(false);
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
+  const buscarPerfil = async (userId) => {
+    const { data } = await supabase
+      .from('perfis_acesso')
+      .select('nivel_acesso')
+      .eq('id', userId)
+      .single();
+    
+    if (data) {
+      setPerfil(data);
+      if (location.pathname === '/agendamento') {
+        setShowModal(true);
+      }
+    }
+  };
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setSession(null);
+    setPerfil(null);
+    setShowModal(false);
+    navigate('/');
+  };
+
+  const selecionarRota = (rota) => {
+    setShowModal(false);
+    navigate(rota);
   };
 
   return (
-    <Router>
+    <>
       <Navbar session={session} onLogout={handleLogout} />
       
-      {/* BARRA DE STATUS CORRIGIDA - ALTA LEGIBILIDADE */}
+      {showModal && session && (
+        <ModalDirecionamento 
+          nivel={perfil?.nivel_acesso} 
+          aoSelecionar={selecionarRota} 
+          aoSair={handleLogout}
+        />
+      )}
+
+      {/* ✅ BARRA DE SESSÃO — email truncado, botões sempre visíveis no mobile */}
       {session && (
-        <div className="fixed top-[80px] md:top-[96px] left-0 w-full bg-slate-800 text-white py-2 px-6 z-[999] shadow-lg">
-          <div className="max-w-7xl mx-auto flex justify-between items-center text-[11px] md:text-xs font-semibold tracking-wide uppercase">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-              <span className="text-slate-300">Sessão Ativa:</span>
-              <span className="text-white">{session.user.email}</span>
+        <div className="fixed top-[80px] md:top-[96px] left-0 w-full bg-[#0F172A] text-white py-2 px-4 md:px-6 z-[999] shadow-lg">
+          <div className="max-w-7xl mx-auto flex items-center justify-between gap-3 text-[10px] font-bold tracking-wide uppercase">
+
+            {/* Email: trunca se for longo demais */}
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shrink-0"></div>
+              <span className="text-slate-400 shrink-0 hidden sm:inline">Logado como:</span>
+              <span className="text-slate-400 shrink-0 sm:hidden">Logado:</span>
+              <span className="text-white truncate">{session.user.email}</span>
             </div>
-            <div className="flex items-center gap-4">
-               <span className="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20 hidden sm:inline">
-                 Acesso Restrito
-               </span>
-               <button 
-                 onClick={handleLogout} 
-                 className="text-slate-400 hover:text-white underline transition-colors"
-               >
-                 Desconectar
-               </button>
+
+            {/* Botões — nunca quebram linha */}
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={() => setShowModal(true)}
+                className="bg-[#006363] hover:bg-[#004d4d] px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
+              >
+                Trocar Módulo
+              </button>
+              <button
+                onClick={handleLogout}
+                className="text-slate-400 hover:text-white transition-colors whitespace-nowrap"
+              >
+                Sair
+              </button>
             </div>
+
           </div>
         </div>
       )}
 
       <WhatsAppFloating />
       
-      <div className={session ? "pt-28 md:pt-36" : "pt-24"}> 
+      <div className={session ? "pt-28 md:pt-36 min-h-screen" : "pt-24 min-h-screen"}> 
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/exames" element={<Exames />} />
           <Route path="/vacinas" element={<Vacinas />} />
           <Route path="/contato" element={<Contato />} />
           <Route path="/sobre" element={<Sobre />} />
+          <Route path="/financeiro" element={<Financeiro />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route 
             path="/agendamento" 
             element={
@@ -233,6 +289,14 @@ export default function App() {
         </Routes>
       </div>
       <Footer />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
